@@ -1,0 +1,261 @@
+openapi: "3.0.1"
+info:
+  title: "async-payment-api"
+  version: "2024-03-01T18:09:12Z"
+tags:
+  - name: submit
+    description: Used to submit payment payload
+servers:
+  - url: "https://example.com"
+paths:
+  /submit:
+    put:
+      tags:
+        - "submit"
+      operationId: submit
+      parameters:
+      - name: "Content-Type"
+        in: "header"
+        schema:
+          type: "string"
+      - name: "x-api-key"
+        in: "header"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Payment"
+        required: true
+      responses:
+        200:
+          $ref: "#/components/responses/submit200"
+        400:
+          $ref: "#/components/responses/submit400"
+        403:
+          $ref: "#/components/responses/submit403"
+        500:
+          $ref: "#/components/responses/submit500"
+      security:
+      - api_key: []
+      x-amazon-apigateway-request-validator: "Validate body, query string parameters,\
+        \ and headers"
+      x-amazon-apigateway-integration:
+        credentials: "${submit_exec_role_arn}"
+        httpMethod: "POST"
+        uri: "${submit_payment_queue_name}"
+        responses:
+          "2\\d{2}":
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{\"message\": \"OK\"}"
+          "default":
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{\"message\": \"Bad Request\"}"
+          "5\\d{2}":
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{\"message\": \"Internal Server Error\"}"
+          "403":
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{\"message\": \"Forbidden\"}"
+        requestParameters:
+          integration.request.header.Content-Type: "'application/x-www-form-urlencoded'"
+        requestTemplates:
+          application/json: "Action=SendMessage##\n&MessageBody=$util.urlEncode($input.body)##"
+        passthroughBehavior: "when_no_templates"
+        type: "aws"
+    options:
+      tags:
+        - "submit"
+      responses:
+        200:
+          $ref: "#/components/responses/CORS"
+        300:
+          $ref: "#/components/responses/CORS"
+        400:
+          $ref: "#/components/responses/CORS"
+        500:
+          $ref: "#/components/responses/CORS"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+components:
+  responses:
+    submit200:
+      description: "Successfully submitted payment."
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Max-Age:
+          schema:
+            type: "string"
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIResponse"
+    submit400:
+      description: "Your request failed validation."
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Max-Age:
+          schema:
+            type: "string"
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIResponse"
+    submit403:
+      description: "Your request has been denied access to the resource."
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Max-Age:
+          schema:
+            type: "string"
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIResponse"
+    submit500:
+      description: "An issue occurred when your request was being fulfilled."
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Max-Age:
+          schema:
+            type: "string"
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIResponse"
+    CORS:
+      description: "CORS response"
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Max-Age:
+          schema:
+            type: "string"
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Empty"
+  schemas:
+    APIResponse:
+      type: "object"
+      properties: 
+        message: 
+          type: "string"
+          example: "message example"
+    Empty:
+      title: "Empty Schema"
+      type: "object"
+    Payment:
+      required:
+      - "amount"
+      - "currency"
+      - "dateTimestamp"
+      - "description"
+      - "paymentId"
+      - "userId"
+      type: "object"
+      properties:
+        paymentId:
+          type: "string"
+          format: "uuid"
+          example: "2d5a8218-3c6a-436e-b724-8dff12e7010d"
+        userId:
+          type: "string"
+          format: "uuid"
+          example: "0fa8ca85-d50d-44f9-8a00-5ad67a6d29e4"
+        dateTimestamp:
+          type: "string"
+          example: "1709553600"
+        description:
+          maxLength: 256
+          type: "string"
+          example: "Regular payment made to Netflix from HSBC account"
+        currency:
+          type: "string"
+          example: "GBP"
+        amount:
+          type: "number"
+          example: 7.99
+  securitySchemes:
+    api_key:
+      type: "apiKey"
+      name: "x-api-key"
+      in: "header"      
+x-amazon-apigateway-gateway-responses:
+  DEFAULT_4XX:
+    responseParameters:
+      gatewayresponse.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+      gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+  DEFAULT_5XX:
+    responseParameters:
+      gatewayresponse.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+      gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+x-amazon-apigateway-request-validators:
+  Validate body, query string parameters, and headers:
+    validateRequestParameters: true
+    validateRequestBody: true

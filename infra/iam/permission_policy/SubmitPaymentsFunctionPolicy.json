@@ -1,0 +1,33 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Resource": "${sqs_queue_arn}",
+            "Action": [
+                "sqs:SendMessage",
+                "sqs:ReceiveMessage",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+                "kms:Decrypt"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": "*",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": "${dynamodb_table_arn}",
+            "Action": [
+                "dynamodb:PutItem",
+                "kms:Decrypt"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,52 @@
+{
+	"Records": [
+		{
+			"messageId": "messageId1",
+			"receiptHandle": "AQEBwJnKyrHigUMZj6rYigCgxlaS3SLy0a6756765",
+			"body": "{\n\t\t\t\t\"paymentId\": \"paymentId1\",\n\t\t\t\t\"userId\": \"userId1\",\n\t\t\t\t\"dateTimestamp\": \"1709553600\",\n\t\t\t\t\"description\": \"Regular payment made to Netflix from HSBC account\",\n\t\t\t\t\"currency\": \"GBP\",\n\t\t\t\t\"amount\": 7.99\n\t\t\t}",
+			"attributes": {
+				"ApproximateReceiveCount": "1",
+				"SentTimestamp": "1709553570",
+				"SenderId": "AIDAIENQZJOLO23YVJ4VO",
+				"ApproximateFirstReceiveTimestamp": "1709553580"
+			},
+			"messageAttributes": {},
+			"md5OfBody": "098f6bcd4621d373cade4e832627b4f6",
+			"eventSource": "aws:sqs",
+			"eventSourceARN": "arn:aws:sqs:us-east-1:111122223333:my-queue",
+			"awsRegion": "us-east-1"
+		},
+		{
+			"messageId": "messageId2",
+			"receiptHandle": "12345KyrHigUMZj6rYigCgxlaS3SLy0a",
+			"body": "{\n\t\t\t\t\"paymentId\": \"paymentId2\",\n\t\t\t\t\"userId\": \"userId2\",\n\t\t\t\t\"dateTimestamp\": \"1709553605\",\n\t\t\t\t\"description\": \"Regular payment made to Disney from Natwest account\",\n\t\t\t\t\"currency\": \"GBP\",\n\t\t\t\t\"amount\": 12.99\n\t\t\t}",
+			"attributes": {
+				"ApproximateReceiveCount": "1",
+				"SentTimestamp": "1709553572",
+				"SenderId": "AIDAIENQZJOLO23YVJ4VO",
+				"ApproximateFirstReceiveTimestamp": "1709553580"
+			},
+			"messageAttributes": {},
+			"md5OfBody": "098f6bcd4621d373cade4e832627b4f6",
+			"eventSource": "aws:sqs",
+			"eventSourceARN": "arn:aws:sqs:us-east-1:111122223333:my-queue",
+			"awsRegion": "us-east-1"
+		},
+		{
+			"messageId": "messageId3",
+			"receiptHandle": "12345KyrHigUMZj6rYigCgxlaS3SLy0a",
+			"body": "{\n\t\t\t\t\"paymentId\": \"paymentId3\",\n\t\t\t\t\"userId\": \"userId1\",\n\t\t\t\t\"dateTimestamp\": \"1709553608\",\n\t\t\t\t\"description\": \"Regular payment made to Audible from HSBC account\",\n\t\t\t\t\"currency\": \"GBP\",\n\t\t\t\t\"amount\": 5.99\n\t\t\t}",
+			"attributes": {
+				"ApproximateReceiveCount": "1",
+				"SentTimestamp": "1709553574",
+				"SenderId": "AIDAIENQZJOLO23YVJ4VO",
+				"ApproximateFirstReceiveTimestamp": "1709553580"
+			},
+			"messageAttributes": {},
+			"md5OfBody": "098f6bcd4621d373cade4e832627b4f6",
+			"eventSource": "aws:sqs",
+			"eventSourceARN": "arn:aws:sqs:us-east-1:111122223333:my-queue",
+			"awsRegion": "us-east-1"
+		}
+	]
+}
