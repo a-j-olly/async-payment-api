@@ -1,7 +1,7 @@
 {
   "name": "async-payment-api",
   "version": "1.0.0",
-  "description": "This project demonstrates the infrastructure required to standup an asynchronous payment API",
+  "description": "This project demonstrates serverless infrastructure that can be used to stand up an asynchronous payment API",
   "main": "src/index.js",
   "scripts": {
     "build": "tsc -noEmit && npm run build-cli",
